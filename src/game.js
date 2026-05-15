@@ -88,6 +88,7 @@ let bgmRetrying = false;
 let supabase = null;
 let activeUser = null;
 let cloudReady = false;
+let authRedirectUrl = "";
 
 bgm.volume = 0.42;
 bgm.addEventListener("error", () => {
@@ -433,11 +434,17 @@ async function initAccount() {
     const configResponse = await fetch("/api/config", { cache: "no-store" });
     const config = await configResponse.json();
 
+    if (config.warning) {
+      setAccountState("게스트", "Supabase public key가 필요합니다. secret key는 사용할 수 없습니다.");
+      return;
+    }
+
     if (!config.supabaseUrl || !config.supabaseAnonKey) {
       setAccountState("게스트", "Supabase 환경값을 넣으면 로그인 저장이 켜집니다.");
       return;
     }
 
+    authRedirectUrl = config.siteUrl || window.location.origin;
     const { createClient } = await import(SUPABASE_CDN);
     supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
     cloudReady = true;
@@ -536,7 +543,13 @@ async function signUpWithEmail() {
     return;
   }
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: authRedirectUrl || window.location.origin
+    }
+  });
   setAccountState(error ? "가입 실패" : "가입 완료", error ? error.message : "메일 확인이 필요할 수 있습니다.");
 }
 
