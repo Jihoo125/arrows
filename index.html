@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="애로우즈 - 퍼즐 이스케이프. 화살표를 올바른 순서로 제거하는 미니멀 로직 퍼즐 웹 게임."
+    />
+    <title>애로우즈 - 퍼즐 이스케이프</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <audio id="bgm" preload="none" loop playsinline></audio>
+
+    <main class="shell">
+      <section class="game-panel" aria-label="애로우즈 퍼즐 게임">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Puzzle Escape</p>
+            <h1>애로우즈</h1>
+          </div>
+          <div class="top-actions" aria-label="게임 도구">
+            <button class="icon-button" id="soundBtn" type="button" aria-label="사운드 켜기" title="사운드">
+              <span aria-hidden="true">♪</span>
+            </button>
+            <button class="icon-button" id="resetBtn" type="button" aria-label="전체 진행 초기화" title="전체 초기화">
+              <span aria-hidden="true">↺</span>
+            </button>
+            <button class="icon-button" id="undoBtn" type="button" aria-label="이전 수로 되돌리기" title="되돌리기">
+              <span aria-hidden="true">↶</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="status-grid" aria-live="polite">
+          <div>
+            <span>스테이지</span>
+            <strong id="levelLabel">1</strong>
+          </div>
+          <div>
+            <span>남은 화살표</span>
+            <strong id="remainingLabel">0</strong>
+          </div>
+          <div>
+            <span>이동</span>
+            <strong id="movesLabel">0</strong>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board" id="board" aria-label="퍼즐 보드"></div>
+          <div class="complete" id="completePanel" hidden>
+            <div>
+              <p>해결 완료</p>
+              <strong id="completeText">완벽한 흐름입니다.</strong>
+              <button id="nextBtn" type="button">다음 스테이지</button>
+            </div>
+          </div>
+        </div>
+
+        <footer class="controls">
+          <button id="hintBtn" type="button">힌트</button>
+          <button id="prevLevelBtn" type="button">이전</button>
+          <button id="nextLevelBtn" type="button">다음</button>
+        </footer>
+      </section>
+
+      <dialog class="reset-dialog" id="resetDialog" aria-labelledby="resetTitle">
+        <form method="dialog">
+          <p class="eyebrow">Reset</p>
+          <h2 id="resetTitle">초기화 선택</h2>
+          <p>현재 퍼즐만 다시 시작하거나, 모든 클리어 기록과 언락 상태를 처음으로 되돌릴 수 있습니다.</p>
+          <div class="reset-actions">
+            <button id="restartStageBtn" value="stage" type="button">현재 스테이지 초기화</button>
+            <button id="resetAllBtn" value="all" type="button">전체 진행 초기화</button>
+            <button value="cancel" type="submit">취소</button>
+          </div>
+        </form>
+      </dialog>
+
+      <aside class="side-panel" aria-label="게임 정보">
+        <div class="account-panel" aria-label="계정">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h2 id="accountTitle">게스트</h2>
+            <p id="accountStatus">로컬 저장으로 플레이 중입니다.</p>
+          </div>
+          <form class="auth-form" id="authForm">
+            <input id="emailInput" type="email" autocomplete="email" placeholder="email@example.com" />
+            <input id="passwordInput" type="password" autocomplete="current-password" placeholder="password" />
+            <div class="auth-actions">
+              <button id="loginBtn" type="submit">로그인</button>
+              <button id="signupBtn" type="button">가입</button>
+              <button id="guestBtn" type="button">게스트</button>
+            </div>
+          </form>
+          <button class="logout-btn" id="logoutBtn" type="button" hidden>로그아웃</button>
+        </div>
+
+        <div class="level-card">
+          <p class="eyebrow">World 01</p>
+          <h2 id="levelName">고요한 출구</h2>
+          <p id="levelFlavor">
+            막힌 길을 먼저 읽고, 빠져나갈 수 있는 화살표부터 차분히 제거하세요.
+          </p>
+        </div>
+
+        <div class="rule-list">
+          <h2>규칙</h2>
+          <p>화살표를 누르면 바라보는 방향으로 이동합니다. 가장자리까지 길이 비어 있으면 제거됩니다.</p>
+          <p>경로에 다른 화살표가 있으면 충돌합니다. 순서를 바꾸어 모든 화살표를 없애세요.</p>
+        </div>
+
+        <div class="level-strip" id="levelStrip" aria-label="스테이지 선택"></div>
+      </aside>
+    </main>
+
+    <script type="module" src="./src/game.js"></script>
+  </body>
+</html>
