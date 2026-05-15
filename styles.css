@@ -195,7 +195,7 @@ h2 {
   display: grid;
   place-items: center;
   border-radius: clamp(4px, 0.9vw, 8px);
-  border: 2px solid color-mix(in srgb, var(--arrow-color) 34%, white);
+  border: 2px solid rgba(24, 33, 42, 0.13);
   background: #ffffff;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.84),
