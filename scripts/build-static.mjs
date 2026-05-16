@@ -2,6 +2,7 @@ import { copyFile, mkdir, rm } from "node:fs/promises";
 
 await rm("public", { recursive: true, force: true });
 await mkdir("public/src", { recursive: true });
+await mkdir("public/.well-known", { recursive: true });
 
 await copyFile("index.html", "public/index.html");
 await copyFile("styles.css", "public/styles.css");
