@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.jihoo125dev.arrows",
+      "sha256_cert_fingerprints": [
+        "5D:1C:A6:AE:B7:D7:7E:34:63:A0:CA:F8:A3:D0:E2:99:7C:1E:4C:CD:27:CE:4D:4E:C5:D4:73:F9:55:32:82:21"
+      ]
+    }
+  }
+]
