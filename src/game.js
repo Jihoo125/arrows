@@ -205,6 +205,7 @@ function startLevel(index) {
   moves = 0;
   completePanel.hidden = true;
   localStorage.setItem("arrows-level", String(currentLevel));
+  syncCloudProgress();
   render();
 }
 
