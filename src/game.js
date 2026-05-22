@@ -59,6 +59,8 @@ const emailInput = document.querySelector("#emailInput");
 const passwordInput = document.querySelector("#passwordInput");
 const signupBtn = document.querySelector("#signupBtn");
 const guestBtn = document.querySelector("#guestBtn");
+const googleLoginBtn = document.querySelector("#googleLoginBtn");
+const githubLoginBtn = document.querySelector("#githubLoginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
 const resetDialog = document.querySelector("#resetDialog");
 const restartStageBtn = document.querySelector("#restartStageBtn");
@@ -444,7 +446,7 @@ async function initAccount() {
       return;
     }
 
-    authRedirectUrl = config.siteUrl || window.location.origin;
+    authRedirectUrl = normalizeAuthRedirectUrl(config.siteUrl || window.location.origin);
     const { createClient } = await import(SUPABASE_CDN);
     supabase = createClient(config.supabaseUrl, config.supabaseAnonKey);
     cloudReady = true;
@@ -473,6 +475,14 @@ function setAccountState(title, status) {
   accountTitle.textContent = title;
   accountStatus.textContent = status;
   logoutBtn.hidden = !activeUser;
+}
+
+function normalizeAuthRedirectUrl(url) {
+  if (!url) return window.location.origin;
+  const trimmed = url.trim().replace(/\/+$/, "");
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.includes("localhost") || trimmed.startsWith("127.0.0.1")) return `http://${trimmed}`;
+  return `https://${trimmed}`;
 }
 
 async function applyUser(user) {
@@ -553,6 +563,30 @@ async function signUpWithEmail() {
   setAccountState(error ? "가입 실패" : "가입 완료", error ? error.message : "메일 확인이 필요할 수 있습니다.");
 }
 
+async function loginWithGoogle() {
+  await loginWithOAuthProvider("google", "Google");
+}
+
+async function loginWithGitHub() {
+  await loginWithOAuthProvider("github", "GitHub");
+}
+
+async function loginWithOAuthProvider(provider, label) {
+  if (!supabase) {
+    setAccountState("게스트", ".env에 Supabase URL과 anon key를 넣어주세요.");
+    return;
+  }
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: authRedirectUrl || window.location.origin
+    }
+  });
+
+  if (error) setAccountState(`${label} 로그인 실패`, error.message);
+}
+
 async function logout() {
   if (supabase) await supabase.auth.signOut();
   activeUser = null;
@@ -571,6 +605,8 @@ soundBtn.addEventListener("click", toggleSound);
 authForm.addEventListener("submit", loginWithEmail);
 signupBtn.addEventListener("click", signUpWithEmail);
 guestBtn.addEventListener("click", logout);
+googleLoginBtn.addEventListener("click", loginWithGoogle);
+githubLoginBtn.addEventListener("click", loginWithGitHub);
 logoutBtn.addEventListener("click", logout);
 
 startLevel(currentLevel);

@@ -385,6 +385,7 @@ h2 {
 }
 
 .auth-actions button,
+.oauth-button,
 .logout-btn {
   min-height: 38px;
   padding: 0 10px;
@@ -401,6 +402,19 @@ h2 {
 .auth-actions button:nth-child(3),
 .logout-btn {
   background: var(--green);
+}
+
+.oauth-button {
+  width: 100%;
+  background: #ffffff;
+  color: #1f1f1f;
+  border: 1px solid var(--line);
+}
+
+.oauth-button-dark {
+  background: #24292f;
+  color: #ffffff;
+  border-color: #24292f;
 }
 
 .logout-btn {
