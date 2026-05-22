@@ -475,6 +475,7 @@ async function initAccount() {
 function setAccountState(title, status) {
   accountTitle.textContent = title;
   accountStatus.textContent = status;
+  authForm.hidden = Boolean(activeUser);
   logoutBtn.hidden = !activeUser;
 }
 
